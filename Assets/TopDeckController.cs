@@ -30,6 +30,7 @@ public class TopDeckController : MonoBehaviour
             card.transform.position = instances.topDeckOpenPosition;
             card.GetComponent<SpriteRenderer>().sprite = instances.topDeck[TopDeckCount - 1];
             card.GetComponent<CardController>().gameController = gameController;
+            card.GetComponent<CardController>().instances = instances;
             card.name = "card" + TopDeckCount;
             TopDeckCount--;
             if (TopDeckCount == 0)
