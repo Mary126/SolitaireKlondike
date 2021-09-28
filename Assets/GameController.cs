@@ -5,33 +5,25 @@ using UnityEngine;
 public class GameController : MonoBehaviour
 {
     private Instances instances;
-    private DeckGenerator deckGenerator;
 
     void Awake()
     {
         instances = GetComponent<Instances>();
-        deckGenerator = GetComponent<DeckGenerator>();
-        deckGenerator.GenerateDeck();
     }
     
-    public void PutCardInBottomRow(GameObject cardToAdd, int row)
+    public void PutCardInRow(GameObject cardToAdd)
     {
-        if (row >= 0 && row <= 6)
-        {
-            GameObject previousCard = instances.bottomRow[row][instances.bottomRow[row].Count - 1];
-            Vector3 cardPosition = previousCard.transform.position;
-            cardPosition.y -= 0.8f;
-            cardPosition.z -= 1;
-            cardToAdd.transform.position = cardPosition;
-            instances.bottomRow[row].Add(cardToAdd);
-        }
+        GameObject previousCard = instances.field[cardToAdd.tag][instances.field[cardToAdd.tag].Count - 1];
+        Vector3 cardPosition = previousCard.transform.position;
+        cardPosition.y -= 0.8f;
+        cardPosition.z -= 1;
+        cardToAdd.transform.position = cardPosition;
+        instances.field[cardToAdd.tag].Add(cardToAdd);
+        Debug.Log("Put Card " + cardToAdd.name + " to " + cardToAdd.tag);
     }
     public void RemoveCardFromRow(GameObject card)
     {
-        for (int i = 0; i < 6; i++)
-        {
-            instances.bottomRow[i].Remove(card);
-        }
-        //Debug.Log("Called Remover");
+        instances.field[card.tag].Remove(card);
+        Debug.Log("Called Remover");
     }
 }

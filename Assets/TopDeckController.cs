@@ -11,7 +11,6 @@ public class TopDeckController : MonoBehaviour
     private void Start()
     {
         TopDeckCount = instances.topDeck.Count;
-        Debug.Log(TopDeckCount);
     }
     private void OnMouseDown()
     {
@@ -27,30 +26,29 @@ public class TopDeckController : MonoBehaviour
         {
             
             card = Instantiate(instances.card);
-            instances.topDeckOpenPosition.z -= 1;
+            instances.topDeckOpenPosition.z = -instances.field["DeckOpened"].Count;
             card.transform.position = instances.topDeckOpenPosition;
             card.GetComponent<SpriteRenderer>().sprite = instances.topDeck[TopDeckCount - 1];
             card.GetComponent<CardController>().gameController = gameController;
             card.name = "card" + TopDeckCount;
             TopDeckCount--;
-            Debug.Log("Opened Top Deck Card " + TopDeckCount);
             if (TopDeckCount == 0)
             {
                 this.GetComponent<SpriteRenderer>().sprite = instances.CardBlank;
             }
-            card.tag = "Deck Card";
-            instances.topDeckOpened.Add(card);
+            card.tag = "DeckOpened";
+            instances.field["DeckOpened"].Add(card);
         }
         else
         {
-            for (int i = 0; i < instances.topDeckOpened.Count; i++)
+            for (int i = 0; i < instances.field["DeckOpened"].Count; i++)
             {
                 TopDeckCount++;
-                Destroy(instances.topDeckOpened[i]);
+                Destroy(instances.field["DeckOpened"][i]);
             }
-            for (int i = 0; i < instances.topDeckOpened.Count; i++)
+            for (int i = 0; i < instances.field["DeckOpened"].Count; i++)
             {
-                instances.topDeckOpened.RemoveAt(i);
+                instances.field["DeckOpened"].RemoveAt(i);
             }
             this.GetComponent<SpriteRenderer>().sprite = instances.CardBack;
         }

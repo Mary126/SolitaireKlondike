@@ -5,8 +5,6 @@ TagManager:
   serializedVersion: 2
   tags:
   - Top Row
-  - Bottom Row
-  - Top Row Card
   - Deck Card
   - BottomRow1
   - BottomRow2
@@ -14,6 +12,11 @@ TagManager:
   - BottomRow4
   - BottomRow5
   - BottomRow6
+  - DeckOpened
+  - TopRow1
+  - TopRow2
+  - TopRow3
+  - TopRow4
   layers:
   - Default
   - TransparentFX

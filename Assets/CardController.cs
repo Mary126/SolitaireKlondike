@@ -26,7 +26,7 @@ public class CardController : MonoBehaviour
         startingPosition = transform.position;
         // if there is a card above this one
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.back), out hit, 10f))
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.back), out hit, 100f))
         {
             moveOtherCards = true;
             cardAbove = hit.collider.gameObject;
@@ -38,41 +38,33 @@ public class CardController : MonoBehaviour
         Ray camRay = myMainCamera.ScreenPointToRay(Input.mousePosition);
         float planeDist;
         dragPlane.Raycast(camRay, out planeDist);
-        transform.position = camRay.GetPoint(planeDist) + offset;
+        Vector3 positionToMove = camRay.GetPoint(planeDist) + offset;
+        positionToMove.z = -53 + startingPosition.z; //move above all cards
+        Debug.Log(startingPosition.z);
+        transform.position = positionToMove;
         isDragging = true;
-        if (moveOtherCards == true && isDragging)
+        if (moveOtherCards == true)
         {
             cardAbove.BroadcastMessage("OnMouseDrag");
         }
     }
-    public void SnapWithOtherCard(GameObject card)
-    {
-        this.transform.position = card.transform.position;
-    }
     public void OnMouseUp()
     {
-        Debug.Log(this.name + this.isDragging);
         if (isDragging)
         {
             RaycastHit hit;
             bool targetHit = false;
             for (int i = 0; i < 4; i++)
             {
-                if(Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 2f) && !targetHit) {
-                    gameController.RemoveCardFromRow(this.gameObject);
-                    this.tag = hit.collider.gameObject.tag;
-                    switch (hit.collider.gameObject.tag)
+                if(Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 100f) && !targetHit) {
+                    if (hit.collider.gameObject.tag != "DeckOpened" && hit.collider.gameObject.tag != "Deck Card")
                     {
-                        case "BottomRow1": gameController.PutCardInBottomRow(this.gameObject, 0); break;
-                        case "BottomRow2": gameController.PutCardInBottomRow(this.gameObject, 1); break;
-                        case "BottomRow3": gameController.PutCardInBottomRow(this.gameObject, 2); break;
-                        case "BottomRow4": gameController.PutCardInBottomRow(this.gameObject, 3); break;
-                        case "BottomRow5": gameController.PutCardInBottomRow(this.gameObject, 4); break;
-                        case "BottomRow6": gameController.PutCardInBottomRow(this.gameObject, 5); break;
-                        default: break;
+                        gameController.RemoveCardFromRow(this.gameObject);
+                        this.tag = hit.collider.gameObject.tag;
+                        gameController.PutCardInRow(this.gameObject);
+                        isDragging = false;
+                        targetHit = true;
                     }
-                    isDragging = false;
-                    targetHit = true;
                 }
             }
             if (targetHit == false)
