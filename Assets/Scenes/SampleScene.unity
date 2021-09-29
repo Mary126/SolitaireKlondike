@@ -213,7 +213,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 275339381}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.8, y: -1.43, z: 0}
+  m_LocalPosition: {x: -0.8, y: 0.56, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1115212026}
@@ -400,7 +400,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4429079435707044521, guid: 76b957c1dc6ee3c40bf99cbec961b3ce, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.75
+      value: 7.5
       objectReference: {fileID: 0}
     - target: {fileID: 4429079435707044521, guid: 76b957c1dc6ee3c40bf99cbec961b3ce, type: 3}
       propertyPath: m_LocalPosition.z
@@ -914,7 +914,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5876129770314287669, guid: 9d1bdc6cd5e49624d912b78f3b9323da, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.75
+      value: 7.5
       objectReference: {fileID: 0}
     - target: {fileID: 5876129770314287669, guid: 9d1bdc6cd5e49624d912b78f3b9323da, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1037,8 +1037,8 @@ MonoBehaviour:
   card: {fileID: 6775575646321057057, guid: 76b957c1dc6ee3c40bf99cbec961b3ce, type: 3}
   CardBack: {fileID: -1172610561180769374, guid: a1355c8983e7fd742810642c6a090766, type: 3}
   CardBlank: {fileID: 21300000, guid: 6c964eb1588ffd3458198abe59aa57ae, type: 3}
-  topDeckPosition: {x: -10, y: 5.75, z: 0}
-  topDeckOpenPosition: {x: -6.5, y: 5.75, z: 0}
+  topDeckPosition: {x: -10, y: 7.5, z: 0}
+  topDeckOpenPosition: {x: -6.5, y: 7.5, z: 0}
   bottomRowPlaces:
   - {fileID: 1594857012}
   - {fileID: 1704282403}
@@ -1187,7 +1187,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1890193750}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.8, y: 2.73, z: 0}
+  m_LocalPosition: {x: -0.8, y: 4.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 965880776}
