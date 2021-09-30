@@ -42,13 +42,13 @@ public class KlondikeGenerator : MonoBehaviour
                     card.transform.SetParent(instances.cardPlaces.transform);
                     card.tag = instances.field[cardTag][instances.field[cardTag].Count - 1].tag;
                     Vector3 positionToPlace = instances.field[cardTag][instances.field[cardTag].Count - 1].transform.position;
-                    positionToPlace.y -= 0.3f;
+                    if (instances.field[cardTag].Count > 1) positionToPlace.y -= 0.3f;
                     positionToPlace.z -= 1;
                     card.transform.position = positionToPlace;
                     card.GetComponent<CardController>().klondikeRules = klondikeRules;
                     card.GetComponent<CardController>().instances = instances;
                     cardInstances.SetCardSuit(spr);
-                    card.name = "card" + "bottomrow"+cardInstances.cardSuit.suit+cardInstances.cardSuit.number;
+                    card.name = "card" + "bottomrow" + cardInstances.cardSuit.suit + cardInstances.cardSuit.number;
                     cardInstances.SetPosition("BottomRow", row);
                     if (i == row) // if the card is the last one open that card
                     {
