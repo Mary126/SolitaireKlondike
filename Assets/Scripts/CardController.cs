@@ -14,12 +14,15 @@ public class CardController : MonoBehaviour
     private bool isDragging = false;
     public GameObject isMovingWithOtherCard = null;
     private GameObject cardAbove;
-    public GameController gameController;
+    public KlondikeRules klondikeRules;
+    private CardInstances cardInstances;
     
     void Start()
     {
+        cardInstances = GetComponent<CardInstances>();
         myMainCamera = Camera.main;
     }
+    
     public void OnMouseDown()
     {
         dragPlane = new Plane(myMainCamera.transform.forward, transform.position);
@@ -27,8 +30,6 @@ public class CardController : MonoBehaviour
         float planeDist;
         dragPlane.Raycast(camRay, out planeDist);
         offset = transform.position - camRay.GetPoint(planeDist);
-        //make distance between cards 1
-        
         startingPosition = transform.position;
         // if there is a card above this one
         RaycastHit hit;
@@ -46,7 +47,6 @@ public class CardController : MonoBehaviour
         float planeDist;
         dragPlane.Raycast(camRay, out planeDist);
         Vector3 positionToMove = camRay.GetPoint(planeDist) + offset;
-        positionToMove.z = -53 + startingPosition.z; //move above all cards
         if (positionToMove.x == startingPosition.x && positionToMove.y == startingPosition.y)
         {
             isDragging = false;
@@ -54,9 +54,11 @@ public class CardController : MonoBehaviour
         else 
         {
             isDragging = true;
-            transform.position = positionToMove;
+            positionToMove.z = -60 + startingPosition.z; //move above all cards
             if (isMovingWithOtherCard != null)
-                transform.position = new Vector3(transform.position.x, isMovingWithOtherCard.transform.position.y - 1, transform.position.z);
+                positionToMove.y = isMovingWithOtherCard.transform.position.y - 1;
+            transform.position = positionToMove;
+            
         }
         if (moveOtherCards)
         {
@@ -71,9 +73,11 @@ public class CardController : MonoBehaviour
             {
                 if (collidedWithRow)
                 {
-                    gameController.RemoveCardFromRow(gameObject);
-                    this.tag = isMovingWithOtherCard.tag;
-                    gameController.PutCardInRow(this.gameObject);
+                    klondikeRules.RemoveCardFromRow(gameObject.GetComponent<CardInstances>());
+                    cardInstances.position.row = isMovingWithOtherCard.GetComponent<CardInstances>().position.row;
+                    cardInstances.position.number = isMovingWithOtherCard.GetComponent<CardInstances>().position.number;
+                    tag = isMovingWithOtherCard.tag;
+                    klondikeRules.PutCardInRow(gameObject.GetComponent<CardInstances>());
                 }
                 else
                 {
@@ -87,12 +91,17 @@ public class CardController : MonoBehaviour
                 {
                     if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 100f) && !collidedWithRow)
                     {
-                        if (hit.collider.gameObject.tag != "DeckOpened" && hit.collider.gameObject.tag != "Deck Card")
+                        if (hit.collider.gameObject.tag != "DeckOpened" && hit.collider.gameObject.tag != "Deck Card" && tag != hit.collider.tag)
                         {
-                            gameController.RemoveCardFromRow(this.gameObject);
-                            this.tag = hit.collider.gameObject.tag;
-                            gameController.PutCardInRow(this.gameObject);
-                            collidedWithRow = true;
+                            string rowType = hit.collider.gameObject.tag;
+                            if (klondikeRules.CompatibleWithCard(gameObject, hit.collider.gameObject, rowType.Substring(0, rowType.Length - 1))) {
+                                klondikeRules.RemoveCardFromRow(gameObject.GetComponent<CardInstances>());
+                                tag = rowType;
+                                cardInstances.position.row = rowType.Substring(0, rowType.Length - 1);
+                                cardInstances.position.number = int.Parse(rowType.Substring(rowType.Length - 1, 1));
+                                klondikeRules.PutCardInRow(gameObject.GetComponent<CardInstances>());
+                                collidedWithRow = true;
+                            }
                         }
                     }
                 }

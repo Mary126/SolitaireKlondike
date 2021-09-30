@@ -17,6 +17,7 @@ TagManager:
   - TopRow2
   - TopRow3
   - TopRow4
+  - BottomRow7
   layers:
   - Default
   - TransparentFX
