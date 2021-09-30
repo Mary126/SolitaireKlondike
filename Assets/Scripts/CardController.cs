@@ -12,7 +12,8 @@ public class CardController : MonoBehaviour
     public bool collidedWithRow = false;
     private bool moveOtherCards = false;
     private bool isDragging = false;
-    public GameObject isMovingWithOtherCard = null;
+    public GameObject isMovingWithOtherCard = null; //if this card is moving with the card underneath
+                                                    //i decided to make it a gameobject
     private GameObject cardAbove;
     public KlondikeRules klondikeRules;
     private CardInstances cardInstances;
@@ -25,53 +26,55 @@ public class CardController : MonoBehaviour
     
     public void OnMouseDown()
     {
-        dragPlane = new Plane(myMainCamera.transform.forward, transform.position);
-        Ray camRay = myMainCamera.ScreenPointToRay(Input.mousePosition);
-        float planeDist;
-        dragPlane.Raycast(camRay, out planeDist);
-        offset = transform.position - camRay.GetPoint(planeDist);
-        startingPosition = transform.position;
-        // if there is a card above this one
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.back), out hit, 100f))
+        if (cardInstances.isOpen) // if the card is open
         {
-            moveOtherCards = true;
-            cardAbove = hit.collider.gameObject;
-            cardAbove.GetComponent<CardController>().isMovingWithOtherCard = gameObject;
-            cardAbove.BroadcastMessage("OnMouseDown");
+            dragPlane = new Plane(myMainCamera.transform.forward, transform.position);
+            Ray camRay = myMainCamera.ScreenPointToRay(Input.mousePosition);
+            float planeDist;
+            dragPlane.Raycast(camRay, out planeDist);
+            offset = transform.position - camRay.GetPoint(planeDist);
+            startingPosition = transform.position;
+            // if there is a card above this one
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.back), out hit, 2f))
+            {
+                moveOtherCards = true; //this card is moving the other card
+                cardAbove = hit.collider.gameObject;
+                cardAbove.GetComponent<CardController>().isMovingWithOtherCard = gameObject;
+                cardAbove.BroadcastMessage("OnMouseDown");
+            }
         }
     }
     public void OnMouseDrag()
     {
-        Ray camRay = myMainCamera.ScreenPointToRay(Input.mousePosition);
-        float planeDist;
-        dragPlane.Raycast(camRay, out planeDist);
-        Vector3 positionToMove = camRay.GetPoint(planeDist) + offset;
-        if (positionToMove.x == startingPosition.x && positionToMove.y == startingPosition.y)
+        if (cardInstances.isOpen) // if the card is open
         {
-            isDragging = false;
-        }
-        else 
-        {
-            isDragging = true;
-            positionToMove.z = -60 + startingPosition.z; //move above all cards
-            if (isMovingWithOtherCard != null)
-                positionToMove.y = isMovingWithOtherCard.transform.position.y - 1;
-            transform.position = positionToMove;
-            
-        }
-        if (moveOtherCards)
-        {
-            cardAbove.BroadcastMessage("OnMouseDrag");
+            Ray camRay = myMainCamera.ScreenPointToRay(Input.mousePosition);
+            float planeDist;
+            dragPlane.Raycast(camRay, out planeDist);
+            Vector3 positionToMove = camRay.GetPoint(planeDist) + offset;
+            if (positionToMove.x != startingPosition.x && positionToMove.y != startingPosition.y)
+            {
+                isDragging = true;
+                positionToMove.z = -60 + startingPosition.z; //move above all cards
+                if (isMovingWithOtherCard != null)
+                    positionToMove.y = isMovingWithOtherCard.transform.position.y - 1;
+                transform.position = positionToMove;
+            }
+            // if the card is moving the card above, broadcast function on that card
+            if (moveOtherCards)
+            {
+                cardAbove.BroadcastMessage("OnMouseDrag");
+            }
         }
     }
     public void OnMouseUp()
     {
-        if (isDragging)
+        if (isDragging && cardInstances.isOpen) // if the card was dragged and that card is open
         {
-            if (isMovingWithOtherCard != null)
+            if (isMovingWithOtherCard != null) // if this card is moving with the card underneath
             {
-                if (collidedWithRow)
+                if (collidedWithRow) // if the first card of the moving column is colliding with a row
                 {
                     klondikeRules.RemoveCardFromRow(gameObject.GetComponent<CardInstances>());
                     cardInstances.position.row = isMovingWithOtherCard.GetComponent<CardInstances>().position.row;
@@ -79,7 +82,7 @@ public class CardController : MonoBehaviour
                     tag = isMovingWithOtherCard.tag;
                     klondikeRules.PutCardInRow(gameObject.GetComponent<CardInstances>());
                 }
-                else
+                else // if not return to the starting position
                 {
                     transform.position = startingPosition;
                 }
@@ -87,34 +90,44 @@ public class CardController : MonoBehaviour
             else
             {
                 RaycastHit hit;
-                for (int i = 0; i < 4; i++)
+                for (int i = 0; i < 4; i++) // i decided to make four rays just to be sure
                 {
                     if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 100f) && !collidedWithRow)
                     {
-                        if (hit.collider.gameObject.tag != "DeckOpened" && hit.collider.gameObject.tag != "Deck Card" && tag != hit.collider.tag)
+                        // if the colliding place is not a top deck place
+                        // and the row has been changed
+                        if (hit.collider.gameObject.tag != "DeckOpened" && 
+                             hit.collider.gameObject.tag != "Deck Card" && 
+                             tag != hit.collider.tag) 
                         {
                             string rowType = hit.collider.gameObject.tag;
-                            if (klondikeRules.CompatibleWithCard(gameObject, hit.collider.gameObject, rowType.Substring(0, rowType.Length - 1))) {
+                            if (klondikeRules.CompatibleWithCard(gameObject, 
+                                                                 hit.collider.gameObject,
+                                                                 rowType.Substring(0, rowType.Length - 1))) 
+                            {
                                 klondikeRules.RemoveCardFromRow(gameObject.GetComponent<CardInstances>());
-                                tag = rowType;
+                                tag = rowType; //make the tag of the object the tag of the collided object
+                                //take the row name from the tag
                                 cardInstances.position.row = rowType.Substring(0, rowType.Length - 1);
+                                //take the number of the row from tag
                                 cardInstances.position.number = int.Parse(rowType.Substring(rowType.Length - 1, 1));
                                 klondikeRules.PutCardInRow(gameObject.GetComponent<CardInstances>());
-                                collidedWithRow = true;
+                                collidedWithRow = true; // this card has been collided with a row
                             }
                         }
                     }
                 }
-                if (collidedWithRow == false)
+                // if the card hasn't collided with anything return to the starting position
+                if (collidedWithRow == false) 
                 {
                     Debug.Log("ReturnToPosition" + startingPosition);
-                    transform.position = startingPosition;
+                    transform.position = startingPosition; //return to the starting position
                 }
             }
         }
-        if (moveOtherCards)
+        if (moveOtherCards) // if the card is moving other card
         {
-            cardAbove.GetComponent<CardController>().collidedWithRow = collidedWithRow;
+            cardAbove.GetComponent<CardController>().collidedWithRow = collidedWithRow; // show that card that we collided with a row
             cardAbove.BroadcastMessage("OnMouseUp");
         }
         moveOtherCards = false;

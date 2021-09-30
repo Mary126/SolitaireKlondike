@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class TopDeckController : MonoBehaviour
 {
@@ -10,53 +11,52 @@ public class TopDeckController : MonoBehaviour
     public GameObject deckPlace;
     private void Start()
     {
-        TopDeckCount = instances.topDeck.Count;
+        TopDeckCount = instances.cards.Count;
     }
     private void OnMouseDown()
     {
-        OpenCardTopDeck(instances.card);
+        OpenCardTopDeck();
     }
-    void RemoveCardFromOpenDeck()
+    void OpenCardTopDeck()
     {
-        instances.topDeckOpenPosition.z += 1;
-    }
-    void OpenCardTopDeck(GameObject card)
-    {
-        if (TopDeckCount > 0)
+        if (instances.cards.Count > 0) // if there are cards in the top deck
         {
-            card = Instantiate(instances.card);
+            GameObject card = Instantiate(instances.card);
             card.transform.SetParent(instances.cardPlaces.transform);
             instances.topDeckOpenPosition.z = -instances.field["DeckOpened"].Count;
             card.transform.position = instances.topDeckOpenPosition;
-            card.GetComponent<SpriteRenderer>().sprite = instances.topDeck[TopDeckCount - 1];
-            card.tag = "DeckOpened";
-            card.GetComponent<CardInstances>().SetCardType(instances.topDeck[TopDeckCount - 1]);
+            card.GetComponent<SpriteRenderer>().sprite = instances.cards[instances.cards.Count - 1];
+            card.GetComponent<CardInstances>().SetCardSuit(instances.cards[instances.cards.Count - 1]);
             card.GetComponent<CardInstances>().isOpen = true;
             card.GetComponent<CardController>().klondikeRules = klondikeRules;
             card.GetComponent<CardController>().instances = instances;
             card.GetComponent<CardInstances>().SetPosition("DeckCard", 0);
-            card.name = "card" + TopDeckCount;
-            TopDeckCount--;
-            if (TopDeckCount == 0)
-            {
-                this.GetComponent<SpriteRenderer>().sprite = instances.CardBlank;
-            }
+            card.name = "card" + card.GetComponent<CardInstances>().cardSuit.suit + card.GetComponent<CardInstances>().cardSuit.number;
             card.tag = "DeckOpened";
-            
+            instances.cards.RemoveAt(instances.cards.Count - 1);
+            if (instances.cards.Count == 0) // if there are no cards in the deck
+            {
+                //set the sprite to blank
+                GetComponent<SpriteRenderer>().sprite = instances.CardBlank;
+            }
             instances.field["DeckOpened"].Add(card);
         }
-        else
+        else // if there are not, then
         {
-            for (int i = 0; i < instances.field["DeckOpened"].Count; i++)
+            //destroy all the cards in DeckOpened
+            for (int i = instances.field["DeckOpened"].Count - 1; i >= 0; i--) 
             {
-                TopDeckCount++;
+                instances.cards.Add(instances.field["DeckOpened"][i].GetComponent<SpriteRenderer>().sprite);
                 Destroy(instances.field["DeckOpened"][i]);
             }
-            for (int i = 0; i < instances.field["DeckOpened"].Count; i++)
-            {
-                instances.field["DeckOpened"].RemoveAt(i);
-            }
-            this.GetComponent<SpriteRenderer>().sprite = instances.CardBack;
+            instances.field["DeckOpened"].Clear();
+            //set the sprite to the back of the card
+            GetComponent<SpriteRenderer>().sprite = instances.CardBack;
+            var query = instances.cards.GroupBy(x => x)
+              .Where(g => g.Count() > 1)
+              .Select(y => y.Key)
+              .ToList();
+            Debug.Log(query.Count);
         }
     }
 }

@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class Instances : MonoBehaviour
 {
-    [System.NonSerialized] public List<Sprite> topDeck;
     [System.NonSerialized] public Dictionary<string, List<GameObject>> field;
     public List<Sprite> cards;
     public GameObject card;
@@ -22,6 +21,7 @@ public class Instances : MonoBehaviour
     void Awake()
     {
         klondikeGenerator = GetComponent<KlondikeGenerator>();
+        //create the field of the game
         field = new Dictionary<string, List<GameObject>>();
         field.Add("DeckOpened", new List<GameObject>());
         field.Add("TopRow1", new List<GameObject>());

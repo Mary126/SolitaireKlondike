@@ -4,20 +4,16 @@ using UnityEngine;
 
 public class CardInstances : MonoBehaviour
 {
-    public enum Type
-    {
-        clubs, diamonds, hearts, spades
-    }
-    public class CardType 
+    public class CardSuit 
     {
         public Sprite sprite;
-        public Type type;
+        public string suit;
         public int number;
 
-        public CardType(Sprite spriteToAdd, Type typeToAdd, int numberToAdd)
+        public CardSuit(Sprite spriteToAdd, string SuitToAdd, int numberToAdd)
         {
             sprite = spriteToAdd;
-            type = typeToAdd;
+            suit = SuitToAdd;
             number = numberToAdd;
         }
     }
@@ -32,69 +28,69 @@ public class CardInstances : MonoBehaviour
             number = numberToAdd;
         }
     }
-    public CardType info;
+    public CardSuit cardSuit;
     public Position position;
     public bool isOpen = false;
     public void SetPosition(string row, int num)
     {
         position = new Position(row, num);
     }
-    public void SetCardType(Sprite sprite)
+    public void SetCardSuit(Sprite sprite)
     {
         switch (sprite.name)
         {
-            case "card-deck_0": info = new CardType(sprite, Type.diamonds, 2); break;
-            case "card-deck_1": info = new CardType(sprite, Type.diamonds, 3); break;
-            case "card-deck_2": info = new CardType(sprite, Type.diamonds, 4); break;
-            case "card-deck_3": info = new CardType(sprite, Type.diamonds, 5); break;
-            case "card-deck_4": info = new CardType(sprite, Type.diamonds, 6); break;
-            case "card-deck_5": info = new CardType(sprite, Type.diamonds, 7); break;
-            case "card-deck_6": info = new CardType(sprite, Type.diamonds, 8); break;
-            case "card-deck_7": info = new CardType(sprite, Type.diamonds, 9); break;
-            case "card-deck_8": info = new CardType(sprite, Type.diamonds, 10); break;
-            case "card-deck_9": info = new CardType(sprite, Type.diamonds, 11); break;
-            case "card-deck_10": info = new CardType(sprite, Type.diamonds, 12); break;
-            case "card-deck_11": info = new CardType(sprite, Type.diamonds, 13); break;
-            case "card-deck_12": info = new CardType(sprite, Type.diamonds, 1); break;
-            case "card-deck_14": info = new CardType(sprite, Type.clubs, 2); break;
-            case "card-deck_15": info = new CardType(sprite, Type.clubs, 3); break;
-            case "card-deck_16": info = new CardType(sprite, Type.clubs, 4); break;
-            case "card-deck_17": info = new CardType(sprite, Type.clubs, 5); break;
-            case "card-deck_18": info = new CardType(sprite, Type.clubs, 6); break;
-            case "card-deck_19": info = new CardType(sprite, Type.clubs, 7); break;
-            case "card-deck_20": info = new CardType(sprite, Type.clubs, 8); break;
-            case "card-deck_21": info = new CardType(sprite, Type.clubs, 9); break;
-            case "card-deck_22": info = new CardType(sprite, Type.clubs, 10); break;
-            case "card-deck_23": info = new CardType(sprite, Type.clubs, 11); break;
-            case "card-deck_24": info = new CardType(sprite, Type.clubs, 12); break;
-            case "card-deck_25": info = new CardType(sprite, Type.clubs, 13); break;
-            case "card-deck_26": info = new CardType(sprite, Type.clubs, 1); break;
-            case "card-deck_28": info = new CardType(sprite, Type.hearts, 2); break;
-            case "card-deck_29": info = new CardType(sprite, Type.hearts, 3); break;
-            case "card-deck_30": info = new CardType(sprite, Type.hearts, 4); break;
-            case "card-deck_31": info = new CardType(sprite, Type.hearts, 5); break;
-            case "card-deck_32": info = new CardType(sprite, Type.hearts, 6); break;
-            case "card-deck_33": info = new CardType(sprite, Type.hearts, 7); break;
-            case "card-deck_34": info = new CardType(sprite, Type.hearts, 8); break;
-            case "card-deck_35": info = new CardType(sprite, Type.hearts, 9); break;
-            case "card-deck_36": info = new CardType(sprite, Type.hearts, 10); break;
-            case "card-deck_37": info = new CardType(sprite, Type.hearts, 11); break;
-            case "card-deck_38": info = new CardType(sprite, Type.hearts, 12); break;
-            case "card-deck_39": info = new CardType(sprite, Type.hearts, 13); break;
-            case "card-deck_40": info = new CardType(sprite, Type.hearts, 1); break;
-            case "card-deck_42": info = new CardType(sprite, Type.spades, 2); break;
-            case "card-deck_43": info = new CardType(sprite, Type.spades, 3); break;
-            case "card-deck_44": info = new CardType(sprite, Type.spades, 4); break;
-            case "card-deck_45": info = new CardType(sprite, Type.spades, 5); break;
-            case "card-deck_46": info = new CardType(sprite, Type.spades, 6); break;
-            case "card-deck_47": info = new CardType(sprite, Type.spades, 7); break;
-            case "card-deck_48": info = new CardType(sprite, Type.spades, 8); break;
-            case "card-deck_49": info = new CardType(sprite, Type.spades, 9); break;
-            case "card-deck_50": info = new CardType(sprite, Type.spades, 10); break;
-            case "card-deck_51": info = new CardType(sprite, Type.spades, 11); break;
-            case "card-deck_52": info = new CardType(sprite, Type.spades, 12); break;
-            case "card-deck_53": info = new CardType(sprite, Type.spades, 13); break;
-            case "card-deck_54": info = new CardType(sprite, Type.spades, 1); break;
+            case "card-deck_0": cardSuit = new CardSuit(sprite, "diamonds", 2); break;
+            case "card-deck_1": cardSuit = new CardSuit(sprite, "diamonds", 3); break;
+            case "card-deck_2": cardSuit = new CardSuit(sprite, "diamonds", 4); break;
+            case "card-deck_3": cardSuit = new CardSuit(sprite, "diamonds", 5); break;
+            case "card-deck_4": cardSuit = new CardSuit(sprite, "diamonds", 6); break;
+            case "card-deck_5": cardSuit = new CardSuit(sprite, "diamonds", 7); break;
+            case "card-deck_6": cardSuit = new CardSuit(sprite, "diamonds", 8); break;
+            case "card-deck_7": cardSuit = new CardSuit(sprite, "diamonds", 9); break;
+            case "card-deck_8": cardSuit = new CardSuit(sprite, "diamonds", 10); break;
+            case "card-deck_9": cardSuit = new CardSuit(sprite, "diamonds", 11); break;
+            case "card-deck_10": cardSuit = new CardSuit(sprite, "diamonds", 12); break;
+            case "card-deck_11": cardSuit = new CardSuit(sprite, "diamonds", 13); break;
+            case "card-deck_12": cardSuit = new CardSuit(sprite, "diamonds", 1); break;
+            case "card-deck_14": cardSuit = new CardSuit(sprite, "clubs", 2); break;
+            case "card-deck_15": cardSuit = new CardSuit(sprite, "clubs", 3); break;
+            case "card-deck_16": cardSuit = new CardSuit(sprite, "clubs", 4); break;
+            case "card-deck_17": cardSuit = new CardSuit(sprite, "clubs", 5); break;
+            case "card-deck_18": cardSuit = new CardSuit(sprite, "clubs", 6); break;
+            case "card-deck_19": cardSuit = new CardSuit(sprite, "clubs", 7); break;
+            case "card-deck_20": cardSuit = new CardSuit(sprite, "clubs", 8); break;
+            case "card-deck_21": cardSuit = new CardSuit(sprite, "clubs", 9); break;
+            case "card-deck_22": cardSuit = new CardSuit(sprite, "clubs", 10); break;
+            case "card-deck_23": cardSuit = new CardSuit(sprite, "clubs", 11); break;
+            case "card-deck_24": cardSuit = new CardSuit(sprite, "clubs", 12); break;
+            case "card-deck_25": cardSuit = new CardSuit(sprite, "clubs", 13); break;
+            case "card-deck_26": cardSuit = new CardSuit(sprite, "clubs", 1); break;
+            case "card-deck_28": cardSuit = new CardSuit(sprite, "hearts", 2); break;
+            case "card-deck_29": cardSuit = new CardSuit(sprite, "hearts", 3); break;
+            case "card-deck_30": cardSuit = new CardSuit(sprite, "hearts", 4); break;
+            case "card-deck_31": cardSuit = new CardSuit(sprite, "hearts", 5); break;
+            case "card-deck_32": cardSuit = new CardSuit(sprite, "hearts", 6); break;
+            case "card-deck_33": cardSuit = new CardSuit(sprite, "hearts", 7); break;
+            case "card-deck_34": cardSuit = new CardSuit(sprite, "hearts", 8); break;
+            case "card-deck_35": cardSuit = new CardSuit(sprite, "hearts", 9); break;
+            case "card-deck_36": cardSuit = new CardSuit(sprite, "hearts", 10); break;
+            case "card-deck_37": cardSuit = new CardSuit(sprite, "hearts", 11); break;
+            case "card-deck_38": cardSuit = new CardSuit(sprite, "hearts", 12); break;
+            case "card-deck_39": cardSuit = new CardSuit(sprite, "hearts", 13); break;
+            case "card-deck_40": cardSuit = new CardSuit(sprite, "hearts", 1); break;
+            case "card-deck_42": cardSuit = new CardSuit(sprite, "spades", 2); break;
+            case "card-deck_43": cardSuit = new CardSuit(sprite, "spades", 3); break;
+            case "card-deck_44": cardSuit = new CardSuit(sprite, "spades", 4); break;
+            case "card-deck_45": cardSuit = new CardSuit(sprite, "spades", 5); break;
+            case "card-deck_46": cardSuit = new CardSuit(sprite, "spades", 6); break;
+            case "card-deck_47": cardSuit = new CardSuit(sprite, "spades", 7); break;
+            case "card-deck_48": cardSuit = new CardSuit(sprite, "spades", 8); break;
+            case "card-deck_49": cardSuit = new CardSuit(sprite, "spades", 9); break;
+            case "card-deck_50": cardSuit = new CardSuit(sprite, "spades", 10); break;
+            case "card-deck_51": cardSuit = new CardSuit(sprite, "spades", 11); break;
+            case "card-deck_52": cardSuit = new CardSuit(sprite, "spades", 12); break;
+            case "card-deck_53": cardSuit = new CardSuit(sprite, "spades", 13); break;
+            case "card-deck_54": cardSuit = new CardSuit(sprite, "spades", 1); break;
             default: break;
         }
     }
