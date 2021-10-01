@@ -12,7 +12,7 @@ public class KlondikeGenerator : MonoBehaviour
         instances = GetComponent<Instances>();
         klondikeRules = GetComponent<KlondikeRules>();
     }
-    private void shuffleGOList(List<Sprite> inputList)
+    private void ShuffleGOList(List<Sprite> inputList)
     {
         System.Random random = new System.Random();
         for (int i = inputList.Count - 1; i >= 1; i--)
@@ -28,7 +28,7 @@ public class KlondikeGenerator : MonoBehaviour
 
     public void GenerateDeck()
     {
-        shuffleGOList(instances.cards); //shuffle existing sprites
+        ShuffleGOList(instances.cards); //shuffle existing sprites
         for (int row = 7; row >= 1; row--) // generate 7 bottom rows
         {
             for (int i = 1; i <= row; i++)

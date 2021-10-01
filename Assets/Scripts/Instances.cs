@@ -16,6 +16,7 @@ public class Instances : MonoBehaviour
     public List<GameObject> topRowPlaces;
     [System.NonSerialized] public KlondikeGenerator klondikeGenerator;
     public GameObject cardPlaces;
+    public GameObject winScreen;
 
     
     void Awake()

@@ -18,6 +18,12 @@ TagManager:
   - TopRow3
   - TopRow4
   - BottomRow7
+  - StartButton
+  - ExitButton
+  - RulesButton
+  - BackButton
+  - MenuButton
+  - RestartButton
   layers:
   - Default
   - TransparentFX

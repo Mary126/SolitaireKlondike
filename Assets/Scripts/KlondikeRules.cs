@@ -24,8 +24,6 @@ public class KlondikeRules : MonoBehaviour
                 // if rowType is bottom row, the card is not the same color of the suit suit as the card underneath
                 // and card number is smaller than the card number underneath by one
                 // i.e a black jack will go on a red queen, a red three will go on a black four
-                Debug.Log(cardInstance.cardSuit.suit + previousCardInstance.cardSuit.suit);
-                Debug.Log(previousCardInstance.cardSuit.number.ToString() + cardInstance.cardSuit.number.ToString());
                 if (rowType == "BottomRow" && 
                     (cardInstance.cardSuit.suit == "hearts" || cardInstance.cardSuit.suit == "diamonds") &&
                     (previousCardInstance.cardSuit.suit == "spades" || previousCardInstance.cardSuit.suit == "clubs") &&
@@ -131,8 +129,13 @@ public class KlondikeRules : MonoBehaviour
         int columns = 0;
         for (int i = 1; i <= 4; i++)
         {
+            Debug.Log(instances.field["TopRow" + i.ToString()].Count);
             if (instances.field["TopRow" + i.ToString()].Count == 14) columns++;
         }
-        if (columns == 4) Debug.Log("Win");
+        if (columns == 4)
+        {
+            Time.timeScale = 0;
+            instances.winScreen.SetActive(true);
+        }
     }
 }
